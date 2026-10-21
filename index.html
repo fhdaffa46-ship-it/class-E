@@ -87,13 +87,14 @@ h1 .ln:nth-child(2)>b{animation-delay:.15s}
 h2{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:800}
 .section-desc{margin-top:18px;color:var(--mut);max-width:52ch}
 .about-content{display:grid;gap:20px;max-width:70ch;color:var(--mut);font-size:1.12rem}
+.about-content .en{color:var(--tx);font-weight:500;padding-left:18px;border-left:3px solid var(--b)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;max-width:640px}
 .stats div{padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--card);transition:transform .4s var(--ease),border-color .4s}
 .stats div:hover{transform:translateY(-6px);border-color:var(--b)}
 .stats strong{display:block;font:800 2.4rem "Bricolage Grotesque",sans-serif;color:var(--tx)}
 .stats span{font-size:.75rem;letter-spacing:.15em}
 
-.member-grid,.memory-grid{display:grid;gap:20px}
+.member-grid{display:grid;gap:20px}
 .member-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .member-card{--rx:0deg;--ry:0deg;padding:32px 26px;border:1px solid var(--line);border-radius:26px;background:var(--card);transform:perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .15s,border-color .4s,box-shadow .4s}
 .member-card:hover{border-color:var(--a);box-shadow:0 24px 50px -24px var(--a)}
@@ -104,19 +105,38 @@ h2{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:800}
 .member-note{color:var(--mut)}
 .hint{margin-top:26px;font-size:.85rem;color:var(--mut);font-style:italic}
 
-.memory-grid{grid-template-columns:repeat(3,1fr)}
-.memory-card{position:relative;min-height:340px;padding:26px;border-radius:28px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;color:#fff;transition:transform .5s var(--ease)}
-.memory-card::before{content:"";position:absolute;inset:0;background:inherit;transition:transform .8s var(--ease)}
-.memory-card>*{position:relative}
-.memory-card:hover{transform:translateY(-10px) rotate(-1deg)}
-.memory-card:hover::before{transform:scale(1.15)}
-.memory-one{background:linear-gradient(145deg,#6d28d9,#22d3ee)}
+/* === Galeri Memories === */
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:270px;gap:18px}
+.memory-card{position:relative;isolation:isolate;border-radius:26px;overflow:hidden;color:#fff;border:1px solid var(--line);background:linear-gradient(145deg,#6d28d9,#22d3ee);box-shadow:0 18px 40px -26px rgba(0,0,0,.6);cursor:pointer}
+.memory-card.feature{grid-column:span 2;grid-row:span 2}
 .memory-two{background:linear-gradient(145deg,#0e7490,#8b5cf6)}
 .memory-three{background:linear-gradient(145deg,#be185d,#8b5cf6)}
-.memory-card>span{font-size:2.2rem;width:56px;height:56px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);transition:transform .6s var(--ease)}
-.memory-card:hover>span{transform:rotate(360deg)}
-.memory-card p{font-size:.75rem;letter-spacing:.2em;opacity:.8}
-.memory-card h3{font-size:1.9rem}
+.memory-card img,.memory-card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:-2;transition:transform 1s var(--ease),filter .6s}
+.memory-card:hover img,.memory-card:hover video{transform:scale(1.07)}
+.memory-card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(to top,rgba(6,8,18,.82) 0%,rgba(6,8,18,.25) 38%,transparent 62%);transition:opacity .5s}
+.mc-cap{position:absolute;left:0;right:0;bottom:0;padding:22px 24px;pointer-events:none;transform:translateY(6px);transition:transform .5s var(--ease)}
+.memory-card:hover .mc-cap{transform:none}
+.mc-cap p{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;letter-spacing:.22em;opacity:.85;margin-bottom:6px}
+.mc-cap p::before{content:"";width:18px;height:2px;border-radius:2px;background:var(--b)}
+.mc-cap h3{font-size:1.35rem;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.memory-card.feature .mc-cap{padding:30px 32px}
+.memory-card.feature .mc-cap h3{font-size:2.1rem}
+.memory-card.is-video{cursor:default}
+.memory-card.is-video::after{background:linear-gradient(to bottom,rgba(6,8,18,.7) 0%,transparent 34%)}
+.memory-card.is-video .mc-cap{top:0;bottom:auto}
+.memory-card:not(.is-video):hover{border-color:var(--b);box-shadow:0 26px 50px -24px var(--b)}
+.memory-card.reveal{transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease),box-shadow .4s,border-color .4s;transition-delay:var(--d,0s),var(--d,0s),var(--d,0s),0s,0s}
+
+.lightbox{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:24px;background:rgba(5,7,14,.9);backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.lightbox.open{opacity:1;visibility:visible}
+.lightbox figure{max-width:min(92vw,1100px);text-align:center;transform:scale(.96);transition:transform .45s var(--ease)}
+.lightbox.open figure{transform:none}
+.lightbox img{max-width:100%;max-height:78vh;border-radius:20px;box-shadow:0 30px 80px -20px #000;border:1px solid var(--line)}
+.lightbox figcaption{margin-top:16px;color:#e9ecf8}
+.lightbox figcaption small{display:block;font-size:.72rem;letter-spacing:.22em;color:var(--b);margin-bottom:4px}
+.lb-btn{position:absolute;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:1.2rem;cursor:pointer;transition:background .3s,transform .3s}
+.lb-btn:hover{background:rgba(255,255,255,.2);transform:scale(1.08)}
+.lb-close{top:20px;right:20px}.lb-prev{left:20px;top:50%}.lb-next{right:20px;top:50%}
 
 .closing{text-align:center;padding:140px 6vw;display:grid;justify-items:center;gap:18px}
 .closing h2{font-size:clamp(2.4rem,6.5vw,5.5rem);margin-bottom:12px}
@@ -129,21 +149,23 @@ footer{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;a
 @media(max-width:860px){
   .hero{grid-template-columns:1fr;padding-top:110px}
   .hero-card{max-width:340px}
-  .memory-grid{grid-template-columns:1fr}.memory-card{min-height:220px}
+  .memory-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:230px}
+  .memory-card.feature{grid-column:span 2;grid-row:span 1}
   .menu-toggle{display:block}
   .nav-links{position:absolute;top:100%;left:4vw;right:4vw;flex-direction:column;align-items:flex-start;padding:22px;border-radius:20px;background:var(--bg2);border:1px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s var(--ease)}
   .nav-links.open{opacity:1;visibility:visible;transform:none}
   .hero-footer{display:none}
   .stats{grid-template-columns:1fr}
 }
+@media(max-width:560px){
+  .memory-grid{grid-template-columns:1fr;grid-auto-rows:260px}
+  .memory-card.feature{grid-column:auto}
+  .memory-card.feature .mc-cap h3{font-size:1.5rem}
+  .lb-prev{left:8px}.lb-next{right:8px}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none;filter:none}h1 .ln>b{transform:none}}
 
-/* === Tambahan: loader, partikel, teks mengetik === */
-.loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:var(--bg);transition:transform .9s var(--ease)}
-.loader.done{transform:translateY(-100%)}
-.loader b{font:800 5rem "Bricolage Grotesque",sans-serif;animation:pop 1s ease-in-out infinite alternate}
-.loader b span{color:var(--b)}
-@keyframes pop{from{transform:scale(.85);opacity:.5}to{transform:scale(1.08);opacity:1}}
+/* === Tambahan: partikel, teks mengetik === */
 .loading h1 .ln>b{animation-play-state:paused}
 .loading{overflow:hidden}
 #fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -154,11 +176,267 @@ footer{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;a
 .btn-primary,.btn-secondary{will-change:transform}
 .hero-symbol{animation:glow 4s ease-in-out infinite alternate}
 @keyframes glow{from{filter:drop-shadow(0 0 10px rgba(139,92,246,.3))}to{filter:drop-shadow(0 0 34px rgba(34,211,238,.6))}}
+
+/* =========================================================
+   === LOADING SCREEN SINEMATIK ===
+   ========================================================= */
+.loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center;overflow:hidden}
+.loader.gone{pointer-events:none}
+.ld-panel{position:absolute;left:0;right:0;height:50.3%;background:var(--bg);transition:transform 1.05s cubic-bezier(.77,0,.18,1)}
+.ld-top{top:0}.ld-bot{bottom:0}
+.ld-top::after,.ld-bot::after{content:"";position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--b),var(--c),var(--a),transparent);box-shadow:0 0 22px var(--b);opacity:0;transition:opacity .4s}
+.ld-top::after{bottom:0}.ld-bot::after{top:0}
+.loader.open .ld-top{transform:translateY(-101%)}
+.loader.open .ld-bot{transform:translateY(101%)}
+.loader.open .ld-top::after,.loader.open .ld-bot::after{opacity:1}
+.ld-glow{position:absolute;inset:0;pointer-events:none;transition:opacity .6s}
+.ld-glow i{position:absolute;border-radius:50%;filter:blur(80px);animation:drift 9s ease-in-out infinite alternate}
+.ld-glow i:nth-child(1){width:46vmax;height:46vmax;background:var(--a);opacity:.28;top:-18%;left:-12%}
+.ld-glow i:nth-child(2){width:40vmax;height:40vmax;background:var(--b);opacity:.2;bottom:-18%;right:-10%;animation-delay:-4s}
+.ld-glow i:nth-child(3){width:28vmax;height:28vmax;background:var(--c);opacity:.14;top:30%;left:38%;animation-delay:-7s}
+.ld-core{position:relative;z-index:2;display:grid;justify-items:center;gap:26px;padding:24px;transition:opacity .55s,transform .8s var(--ease)}
+.loader.exit .ld-core{opacity:0;transform:scale(1.18)}
+.loader.exit .ld-glow{opacity:0}
+.ld-ring{position:relative;width:148px;height:148px;display:grid;place-items:center;animation:ldIn 1s var(--ease) both}
+@keyframes ldIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.ld-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.ld-ring .trk{fill:none;stroke:var(--line);stroke-width:3}
+.ld-ring .prg{fill:none;stroke:url(#ldGrad);stroke-width:4;stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:339.3;filter:drop-shadow(0 0 8px rgba(34,211,238,.7))}
+.ld-orb{position:absolute;inset:-14px;border-radius:50%;border:1px dashed var(--line);animation:spin 9s linear infinite}
+.ld-orb::after{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 16px var(--c)}
+.ld-ring b{font:800 3.4rem/1 "Bricolage Grotesque",sans-serif;animation:pop 1.2s ease-in-out infinite alternate}
+.ld-ring b span{color:var(--b)}
+@keyframes pop{from{transform:scale(.9);opacity:.7}to{transform:scale(1.06);opacity:1}}
+.ld-word{display:flex;justify-content:center;font:800 clamp(2rem,8vw,3.6rem)/1.1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em;color:var(--tx)}
+.ld-word .ch{display:block;overflow:hidden;padding-bottom:.08em}
+.ld-word .ch>i{display:block;font-style:normal;transform:translateY(115%);animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--i)*.07s + .25s)}
+.ld-word .sp{width:.3em}
+.ld-word .ch.hl>i{color:var(--b);text-shadow:0 0 28px rgba(34,211,238,.6)}
+.ld-meta{display:flex;justify-content:space-between;gap:20px;width:min(300px,76vw);font-size:.74rem;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
+.ld-meta b{font-weight:600;color:var(--tx);font-variant-numeric:tabular-nums}
+.ld-bar{width:min(300px,76vw);height:3px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:-12px}
+.ld-bar i{display:block;height:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--a),var(--b),var(--c));box-shadow:0 0 14px var(--b)}
 @media(prefers-reduced-motion:reduce){.loader{display:none}}
+
+/* === Planet Bumi 3D === */
+.orbit{border:1px solid rgba(34,211,238,.45);box-shadow:0 0 14px rgba(34,211,238,.18),inset 0 0 14px rgba(34,211,238,.1)}
+.orbit-one{border-style:solid}
+.orbit-two{border-style:dashed;border-color:rgba(34,211,238,.28)}
+.orbit-two::after{background:var(--b);box-shadow:0 0 18px var(--b)}
+.earth-wrap{position:absolute;inset:19%;z-index:1}
+.earth-wrap::before{content:"";position:absolute;inset:6%;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(34,150,255,.28),rgba(34,211,238,.1) 55%,transparent 70%);filter:blur(14px)}
+.earth-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s var(--ease)}
+.earth-wrap.ready canvas{opacity:1}
+.earth-fallback{position:absolute;inset:0;display:none;place-items:center}
+.earth-wrap.no-webgl .earth-fallback{display:grid}
+.earth-wrap.no-webgl canvas{display:none}
+.symbol-caption,.floating-tag{z-index:3}
+
+/* =========================================================
+   === UPGRADE TAMPILAN: lebih rapi, kaca, bercahaya ===
+   ========================================================= */
+::selection{background:var(--a);color:#fff}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--a),var(--b));border-radius:99px;border:2px solid var(--bg)}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:28px 28px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%)}
+[data-theme=light] body::before{background-image:radial-gradient(rgba(20,24,43,.12) 1px,transparent 1px)}
+
+/* Navbar */
+.navbar.scrolled{box-shadow:0 10px 40px -20px rgba(0,0,0,.6)}
+.logo{display:inline-flex;align-items:center;gap:2px}
+.nav-links a.active{color:var(--tx);text-shadow:0 0 18px rgba(34,211,238,.5)}
+
+/* Heading section */
+.eyebrow{padding:7px 14px;border:1px solid var(--line);border-radius:99px;background:var(--card);backdrop-filter:blur(8px)}
+.section-heading h2{text-wrap:balance}
+.section-heading .eyebrow{margin-bottom:20px}
+
+/* Hero */
+.hero-content::before{content:"";position:absolute;left:-12%;top:-10%;width:70%;height:80%;background:radial-gradient(closest-side,rgba(139,92,246,.22),transparent);filter:blur(30px);z-index:-1}
+h1{text-shadow:0 0 60px rgba(139,92,246,.25)}
+.hero-card{border-color:transparent;background:linear-gradient(var(--bg2),var(--bg2)) padding-box,linear-gradient(140deg,var(--a),var(--b),var(--c)) border-box;border:1px solid transparent;box-shadow:0 40px 90px -40px var(--a),0 0 0 1px rgba(255,255,255,.03) inset}
+.hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08),transparent 45%);pointer-events:none;z-index:2}
+.floating-tag{backdrop-filter:blur(10px);box-shadow:0 12px 30px -14px rgba(0,0,0,.6)}
+.marquee{background:linear-gradient(90deg,var(--bg),var(--card) 20%,var(--card) 80%,var(--bg));-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);border-image:none}
+.marquee span{transition:color .3s}.marquee span:hover{color:var(--b)}
+
+/* Chip daff.ai di dashboard */
+.ai-badge{display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:8px 18px 8px 8px;border-radius:99px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(12px);cursor:pointer;color:var(--tx);font:inherit;transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
+.ai-badge:hover{transform:translateY(-3px);border-color:var(--b);box-shadow:0 16px 36px -18px var(--b)}
+.ai-orb{position:relative;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1rem;background:conic-gradient(from 0deg,var(--a),var(--b),var(--c),var(--a));animation:spin 6s linear infinite}
+.ai-orb::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--bg2)}
+.ai-orb i{position:relative;z-index:1;font-style:normal;animation:spin 6s linear infinite reverse}
+.ai-badge strong{font:800 1.05rem "Bricolage Grotesque",sans-serif;display:block;line-height:1.1}
+.ai-badge strong em{font-style:normal;color:var(--b)}
+.ai-badge small{display:block;font-size:.74rem;color:var(--mut);line-height:1.3}
+
+/* About */
+.about-content p:not(.en){padding-left:18px;border-left:1px solid var(--line)}
+.stats div{background:linear-gradient(160deg,var(--card),transparent);backdrop-filter:blur(8px)}
+.stats strong{background:linear-gradient(120deg,var(--tx),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Member card */
+.member-card{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--card),transparent 70%);backdrop-filter:blur(10px)}
+.member-card::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at 80% 0%,rgba(139,92,246,.22),transparent 60%);opacity:0;transition:opacity .5s}
+.member-card:hover::before{opacity:1}
+.member-avatar{box-shadow:0 14px 30px -12px var(--a)}
+
+/* === DAFTAR MAHASISWA === */
+.students{position:relative}
+.students::before{content:"";position:absolute;left:50%;top:0;width:min(88%,1100px);height:1px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,var(--a),var(--b),var(--c),transparent);opacity:.6}
+.roster-bar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:28px}
+.search{position:relative;flex:1 1 280px;max-width:460px}
+.search input{width:100%;padding:15px 20px 15px 50px;border-radius:99px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(10px);color:var(--tx);font:inherit;transition:border-color .3s,box-shadow .3s}
+.search input::placeholder{color:var(--mut)}
+.search input:focus{outline:none;border-color:var(--b);box-shadow:0 0 0 4px rgba(34,211,238,.15)}
+.search svg{position:absolute;left:19px;top:50%;width:19px;height:19px;transform:translateY(-50%);stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round}
+.count-pill{display:inline-flex;align-items:baseline;gap:8px;padding:12px 20px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:.85rem;color:var(--mut)}
+.count-pill b{font:800 1.5rem "Bricolage Grotesque",sans-serif;color:var(--tx);line-height:1}
+.btn-add{margin-left:auto;cursor:pointer;border:0;font:inherit;font-weight:600;padding:14px 24px;border-radius:99px;color:#fff;background:linear-gradient(120deg,var(--a),var(--b));box-shadow:0 10px 30px -12px var(--a);transition:transform .35s var(--ease)}
+.btn-add:hover{transform:translateY(-3px)}
+.add-form{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;max-height:0;opacity:0;overflow:hidden;margin-bottom:0;transition:max-height .5s var(--ease),opacity .4s,margin .4s}
+.add-form.open{max-height:200px;opacity:1;margin-bottom:28px}
+.add-form input{padding:14px 18px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;min-width:0}
+.add-form input:focus{outline:none;border-color:var(--b)}
+.add-form button{border:0;border-radius:16px;padding:0 24px;font:inherit;font-weight:600;color:#fff;background:var(--a);cursor:pointer}
+.student-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.student-card{position:relative;display:flex;align-items:center;gap:18px;padding:22px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(160deg,var(--card),transparent 80%);backdrop-filter:blur(10px);overflow:hidden;animation:stuIn .7s var(--ease) both;animation-delay:var(--d,0s);transition:transform .4s var(--ease),border-color .4s,box-shadow .4s}
+.student-card::after{content:"";position:absolute;left:0;top:18%;bottom:18%;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--a),var(--b));opacity:0;transition:opacity .4s}
+.student-card:hover{transform:translateY(-5px);border-color:var(--b);box-shadow:0 22px 44px -24px var(--b)}
+.student-card:hover::after{opacity:1}
+@keyframes stuIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.stu-avatar{flex:none;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font:800 1.15rem "Bricolage Grotesque",sans-serif;color:#fff;background:linear-gradient(135deg,var(--h1,#8b5cf6),var(--h2,#22d3ee));box-shadow:0 12px 24px -12px var(--h1,#8b5cf6)}
+.stu-info{min-width:0;flex:1}
+.stu-no{font-size:.68rem;letter-spacing:.2em;color:var(--b)}
+.stu-info h3{font-size:1.2rem;line-height:1.2;margin:2px 0 6px;overflow-wrap:anywhere}
+.stu-npm{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:99px;font-size:.82rem;color:var(--mut);border:1px dashed var(--line);background:transparent;cursor:pointer;font-family:inherit;transition:color .3s,border-color .3s}
+.stu-npm b{font-weight:500;letter-spacing:.06em;color:var(--tx)}
+.stu-npm:hover{border-color:var(--b);color:var(--b)}
+.stu-npm.copied{border-color:#34d399;color:#34d399}
+.stu-del{position:absolute;top:10px;right:12px;border:0;background:none;color:var(--mut);cursor:pointer;font-size:1rem;opacity:0;transition:opacity .3s,color .3s}
+.student-card:hover .stu-del{opacity:1}.stu-del:hover{color:var(--c)}
+.empty{grid-column:1/-1;padding:40px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:24px}
+
+/* Memories */
+.memory-card{box-shadow:0 22px 50px -28px rgba(0,0,0,.7)}
+.memory-card::before{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.mc-cap{z-index:1}
+.closing{position:relative}
+.closing::before{content:"";position:absolute;inset:10% 10%;background:radial-gradient(closest-side,rgba(139,92,246,.2),transparent);filter:blur(40px);z-index:-1}
+footer{backdrop-filter:blur(10px)}
+
+/* =========================================================
+   === TRANSISI PENUTUP (di bawah "This is our story") ===
+   ========================================================= */
+.closing{padding-bottom:70px}
+.outro{position:relative;z-index:1;height:clamp(170px,26vw,300px);margin-top:-1px;overflow:hidden}
+.outro-text{position:absolute;left:0;right:0;top:12%;z-index:2;text-align:center;font-size:.78rem;font-weight:600;color:var(--mut);letter-spacing:.1em;opacity:0;transform:translateY(16px);transition:opacity 1.2s var(--ease) .5s,transform 1.2s var(--ease) .5s,letter-spacing 2.2s var(--ease) .5s}
+.outro.in .outro-text{opacity:1;transform:none;letter-spacing:.38em}
+.outro-line{position:absolute;left:50%;top:calc(12% + 34px);z-index:2;height:1px;width:0;transform:translateX(-50%);background:linear-gradient(90deg,transparent,var(--b),var(--c),transparent);box-shadow:0 0 16px var(--b);transition:width 1.8s var(--ease) .9s}
+.outro.in .outro-line{width:min(70%,520px)}
+.spark{position:absolute;inset:0;z-index:1}
+.spark i{position:absolute;bottom:-10px;width:var(--s);height:var(--s);border-radius:50%;background:var(--k);box-shadow:0 0 12px var(--k);opacity:0;animation:sparkUp var(--t) linear infinite;animation-delay:var(--dl)}
+.outro:not(.in) .spark i{animation-play-state:paused}
+@keyframes sparkUp{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}100%{transform:translate(var(--x),-260px);opacity:0}}
+.wv{position:absolute;left:0;right:0;bottom:0;z-index:1;overflow:hidden;transform:translateY(75%);opacity:0;transition:transform 1.6s var(--ease) var(--wd),opacity 1.1s ease var(--wd)}
+.outro.in .wv{transform:none;opacity:1}
+.wv svg{display:block;width:200%;height:100%;animation:waveMove var(--sp) linear infinite}
+@keyframes waveMove{to{transform:translateX(-50%)}}
+.wv use{fill:var(--wc)}
+.wv1{height:100%;--wc:var(--a);--sp:20s;--wd:.15s}
+.wv1 use{fill-opacity:.35}
+.wv2{height:78%;--wc:var(--b);--sp:28s;--wd:.35s}
+.wv2 svg{animation-direction:reverse}
+.wv2 use{fill-opacity:.3}
+.wv3{height:56%;--wc:var(--c);--sp:36s;--wd:.55s}
+.wv3 use{fill-opacity:.22}
+.wv4{height:36%;--wc:var(--bg2);--sp:44s;--wd:.75s}
+.wv4 use{fill-opacity:1}
+footer{background:var(--bg2);border-top:0}
+
+/* Tirai transisi saat "Back to top" */
+.wipe{position:fixed;inset:0;z-index:190;display:grid;place-items:center;pointer-events:none;background:linear-gradient(135deg,var(--a),var(--b) 55%,var(--c));transform:translateY(100%);transition:transform .75s cubic-bezier(.77,0,.18,1)}
+.wipe b{font:800 clamp(3rem,12vw,7rem) "Bricolage Grotesque",sans-serif;color:#fff;opacity:0;transform:scale(.8);transition:opacity .4s .25s,transform .6s var(--ease) .25s}
+.wipe.go{transform:none;pointer-events:all}
+.wipe.go b{opacity:1;transform:none}
+.wipe.out{transform:translateY(-100%)}
+.wipe.reset{transition:none;transform:translateY(100%)}
+
+/* === daff.ai chat === */
+.ai-fab{position:fixed;right:22px;bottom:22px;z-index:90;display:flex;align-items:center;gap:10px;padding:8px 20px 8px 8px;border:1px solid var(--line);border-radius:99px;background:color-mix(in srgb,var(--bg2) 85%,transparent);backdrop-filter:blur(16px);color:var(--tx);font:700 1rem "Bricolage Grotesque",sans-serif;cursor:pointer;box-shadow:0 18px 40px -16px var(--a);transition:transform .35s var(--ease)}
+.ai-fab:hover{transform:translateY(-4px)}
+.ai-fab em{font-style:normal;color:var(--b)}
+.ai-fab .ai-orb{width:34px;height:34px}
+.ai-panel{position:fixed;right:22px;bottom:92px;z-index:90;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100svh - 130px));display:flex;flex-direction:column;border-radius:26px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(22px);box-shadow:0 40px 90px -30px #000;overflow:hidden;opacity:0;visibility:hidden;transform:translateY(16px) scale(.97);transform-origin:100% 100%;transition:opacity .35s,transform .45s var(--ease),visibility .35s}
+.ai-panel.open{opacity:1;visibility:visible;transform:none}
+.ai-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:linear-gradient(120deg,rgba(139,92,246,.22),rgba(34,211,238,.12))}
+.ai-head .ai-orb{width:36px;height:36px}
+.ai-head strong{font:800 1.1rem "Bricolage Grotesque",sans-serif;display:block;line-height:1.1}
+.ai-head strong em{font-style:normal;color:var(--b)}
+.ai-head small{font-size:.72rem;color:var(--mut);display:flex;align-items:center;gap:6px}
+.ai-head small::before{content:"";width:7px;height:7px;border-radius:50%;background:#34d399}
+.ai-x{margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer}
+.ai-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.msg{max-width:86%;padding:10px 14px;border-radius:18px;font-size:.92rem;line-height:1.5;animation:stuIn .4s var(--ease) both;white-space:pre-line}
+.msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:6px}
+.msg.me{align-self:flex-end;color:#fff;background:linear-gradient(120deg,var(--a),#4f8df7);border-bottom-right-radius:6px}
+.typing{display:inline-flex;gap:4px;padding:14px 16px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--mut);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{transform:translateY(-5px);background:var(--b)}}
+.ai-quick{display:flex;gap:8px;overflow-x:auto;padding:0 18px 12px;scrollbar-width:none}
+.ai-quick::-webkit-scrollbar{display:none}
+.ai-quick button{flex:none;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;font-size:.8rem;cursor:pointer;transition:border-color .3s,color .3s}
+.ai-quick button:hover{border-color:var(--b);color:var(--b)}
+.ai-form{display:flex;gap:10px;padding:12px 14px 14px;border-top:1px solid var(--line)}
+.ai-form input{flex:1;min-width:0;padding:12px 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit}
+.ai-form input:focus{outline:none;border-color:var(--b)}
+.ai-form button{width:44px;border:0;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;background:linear-gradient(120deg,var(--a),var(--b))}
+
+@media(max-width:860px){
+  .add-form{grid-template-columns:1fr}.add-form button{padding:14px}
+  .btn-add{margin-left:0}
+}
+@media(max-width:560px){
+  .ai-fab span{display:none}.ai-fab{padding:8px}
+  .student-grid{grid-template-columns:1fr}
+  .outro-text{font-size:.66rem}
+}
   </style>
 </head>
 <body class="loading">
-  <div class="loader" aria-hidden="true"><b>E<span>.</span></b></div>
+  <!-- ===== LOADING SCREEN ===== -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="ld-panel ld-top"></div>
+    <div class="ld-panel ld-bot"></div>
+    <div class="ld-glow"><i></i><i></i><i></i></div>
+    <div class="ld-core">
+      <div class="ld-ring">
+        <span class="ld-orb"></span>
+        <svg viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="ldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8b5cf6"/><stop offset=".55" stop-color="#22d3ee"/><stop offset="1" stop-color="#f472b6"/>
+            </linearGradient>
+          </defs>
+          <circle class="trk" cx="60" cy="60" r="54"/>
+          <circle class="prg" id="ldRing" cx="60" cy="60" r="54"/>
+        </svg>
+        <b>E<span>.</span></b>
+      </div>
+      <p class="ld-word" aria-label="Class E">
+        <span class="ch" style="--i:0"><i>C</i></span><span class="ch" style="--i:1"><i>L</i></span><span class="ch" style="--i:2"><i>A</i></span><span class="ch" style="--i:3"><i>S</i></span><span class="ch" style="--i:4"><i>S</i></span><span class="ch sp"></span><span class="ch hl" style="--i:6"><i>E</i></span>
+      </p>
+      <div class="ld-bar"><i id="ldBar"></i></div>
+      <div class="ld-meta"><span id="ldStatus">Menyiapkan cerita…</span><b><span id="ldNum">0</span>%</b></div>
+    </div>
+  </div>
+  <div class="wipe" id="wipe" aria-hidden="true"><b>E.</b></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="wavePath" d="M0 80 C180 8 540 152 720 80 C900 8 1260 152 1440 80 L1440 160 L0 160 Z"/></defs></svg>
+
   <div class="progress" id="progress"></div>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="cursor-glow" aria-hidden="true"></div>
@@ -170,6 +448,7 @@ footer{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;a
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#members">Members</a>
+      <a href="#students">Mahasiswa</a>
       <a href="#memories">Memories</a>
       <button id="themeToggle" class="theme-btn" aria-label="Ganti tema">☼</button>
     </nav>
@@ -180,18 +459,25 @@ footer{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;a
       <canvas id="fx" aria-hidden="true"></canvas>
       <div class="hero-content">
         <p class="eyebrow"><span class="live-dot"></span>ONE CLASS, ONE STORY</p>
-        <h1><span class="ln"><b>WELCOME</b></span><span class="ln"><b>TO <span>CLASS</span></b></span></h1>
+        <h1><span class="ln"><b>WELCOME</b></span><span class="ln"><b>TO <span>CLASS E</span></b></span></h1>
         <p class="hero-desc">Bukan sekadar teman sekelas. Kami adalah cerita yang tumbuh bersama.</p>
         <p class="typed">Kami adalah <b id="typed"></b></p>
         <div class="hero-actions">
           <a href="#about" class="btn-primary">Kenali Kelas Kami ↗</a>
-          <a href="#memories" class="btn-secondary">Lihat Memories</a>
+          <a href="#students" class="btn-secondary">Daftar Mahasiswa</a>
         </div>
+        <button class="ai-badge" id="aiBadge" type="button" aria-label="Buka daff.ai">
+          <span class="ai-orb"><i>✦</i></span>
+          <span><strong>daff<em>.ai</em></strong><small>Tanya apa saja soal Class E</small></span>
+        </button>
       </div>
       <div class="hero-card">
         <div class="orbit orbit-one"></div>
         <div class="orbit orbit-two"></div>
-        <div class="hero-symbol">E<span>.</span></div>
+        <div class="earth-wrap" id="earth" role="img" aria-label="Planet Bumi 3D yang berputar">
+          <canvas id="earthCanvas"></canvas>
+          <div class="hero-symbol earth-fallback">E<span>.</span></div>
+        </div>
         <p class="symbol-caption">EST. 2026</p>
         <div class="floating-tag tag-top">✦ DREAM BIG</div>
         <div class="floating-tag tag-bottom">STAY TOGETHER ↗</div>
@@ -213,21 +499,13 @@ footer{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;a
         <h2>Different people.<br><span>One story.</span></h2>
       </div>
       <div class="about-content reveal">
-        <p>
-
-Kami adalah mahasiswa Class E dari Program Studi Pendidikan Bahasa Inggris. Kami berasal dari latar belakang yang berbeda, memiliki kepribadian yang beragam, dan membawa mimpi masing-masing. Namun, kami dipertemukan di satu tempat yang sama untuk memulai perjalanan baru sebagai mahasiswa dan calon guru bahasa Inggris.
-
-Pada awalnya, mungkin kami masih merasa canggung, malu untuk berbicara, atau belum mengenal satu sama lain. Seiring berjalannya waktu, kami mulai membangun pertemanan, berbagi cerita, belajar bersama, dan saling membantu dalam menghadapi berbagai tantangan perkuliahan.
-
-Bagi kami, belajar bahasa Inggris bukan hanya tentang grammar, vocabulary, pronunciation, atau speaking. Lebih dari itu, kami belajar tentang keberanian untuk mencoba, kesabaran dalam memahami sesuatu yang baru, serta pentingnya kerja sama dan saling menghargai.
-
-Sebagai mahasiswa Pendidikan Bahasa Inggris, kami menyadari bahwa perjalanan kami masih panjang. Akan ada tugas yang menantang, presentasi yang membutuhkan keberanian, ujian yang menguji kemampuan, dan berbagai pengalaman yang akan membentuk diri kami menjadi lebih baik.
-
-Namun, kami percaya bahwa setiap proses memiliki makna. Kami ingin tumbuh bersama, saling mendukung, dan terus belajar untuk mencapai impian kami. Suatu hari nanti, kami berharap dapat menjadi guru yang tidak hanya mampu mengajarkan bahasa Inggris, tetapi juga menginspirasi, membimbing, dan memberikan dampak positif bagi orang lain.
-
-We are Class E. We learn together, grow together, and achieve our dreams together.
-
-This is our story, our journey, and the beginning of something meaningful. We are not just classmates; we are part of a journey that we will remember for years to come..</p>
+        <p>Kami adalah mahasiswa Class E dari Program Studi Pendidikan Bahasa Inggris. Kami berasal dari latar belakang yang berbeda, memiliki kepribadian yang beragam, dan membawa mimpi masing-masing. Namun, kami dipertemukan di satu tempat yang sama untuk memulai perjalanan baru sebagai mahasiswa dan calon guru bahasa Inggris.</p>
+        <p>Pada awalnya, mungkin kami masih merasa canggung, malu untuk berbicara, atau belum mengenal satu sama lain. Seiring berjalannya waktu, kami mulai membangun pertemanan, berbagi cerita, belajar bersama, dan saling membantu dalam menghadapi berbagai tantangan perkuliahan.</p>
+        <p>Bagi kami, belajar bahasa Inggris bukan hanya tentang grammar, vocabulary, pronunciation, atau speaking. Lebih dari itu, kami belajar tentang keberanian untuk mencoba, kesabaran dalam memahami sesuatu yang baru, serta pentingnya kerja sama dan saling menghargai.</p>
+        <p>Sebagai mahasiswa Pendidikan Bahasa Inggris, kami menyadari bahwa perjalanan kami masih panjang. Akan ada tugas yang menantang, presentasi yang membutuhkan keberanian, ujian yang menguji kemampuan, dan berbagai pengalaman yang akan membentuk diri kami menjadi lebih baik.</p>
+        <p>Namun, kami percaya bahwa setiap proses memiliki makna. Kami ingin tumbuh bersama, saling mendukung, dan terus belajar untuk mencapai impian kami. Suatu hari nanti, kami berharap dapat menjadi guru yang tidak hanya mampu mengajarkan bahasa Inggris, tetapi juga menginspirasi, membimbing, dan memberikan dampak positif bagi orang lain.</p>
+        <p class="en">We are Class E. We learn together, grow together, and achieve our dreams together.</p>
+        <p>This is our story, our journey, and the beginning of something meaningful. We are not just classmates; we are part of a journey that we will remember for years to come.</p>
         <p>Kami bukan kelas yang sempurna, tetapi kami selalu punya alasan untuk tumbuh dan melangkah bersama.</p>
         <div class="stats">
           <div><strong data-count="1">01</strong><span>FAMILY</span></div>
@@ -249,61 +527,154 @@ This is our story, our journey, and the beginning of something meaningful. We ar
         <article class="member-card reveal"><div class="member-avatar">✎</div><p class="member-role">03 / SECRETARY</p><h3>Nabila Fawwazah Rohadatul'aisyi</h3><p class="member-note">Keeping things in order.</p></article>
         <article class="member-card reveal"><div class="member-avatar">✦</div><p class="member-role">04 / TREASURER</p><h3>Neng Nuriya Indah</h3><p class="member-note">The money keeper.</p></article>
       </div>
-      <p class="hint">Nama di atas masih contoh. Ganti dengan data kelasmu!</p>
+      <p class="hint">Nama di atas adalah ketua kelas dan rekan-rekan</p>
+    </section>
+
+    <!-- ===== DAFTAR MAHASISWA ===== -->
+    <section class="section students" id="students">
+      <div class="section-heading reveal">
+        <p class="eyebrow">03 / THE ROSTER</p>
+        <h2>List of Class E <span>Students</span></h2>
+        <p class="section-desc">Semua anggota Class E beserta NPM-nya. Cari nama atau NPM, lalu klik NPM untuk menyalinnya.</p>
+      </div>
+
+      <div class="roster-bar reveal">
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="stuSearch" type="search" placeholder="Cari nama atau NPM…" autocomplete="off" aria-label="Cari mahasiswa">
+        </label>
+        <p class="count-pill"><b id="stuCount">0</b> mahasiswa</p>
+        <button class="btn-add" id="stuToggle" type="button" aria-expanded="false">+ Tambah mahasiswa</button>
+      </div>
+
+      <form class="add-form" id="stuForm" autocomplete="off">
+        <input id="stuName" placeholder="Nama lengkap" required aria-label="Nama lengkap">
+        <input id="stuNpm" placeholder="NPM (angka)" inputmode="numeric" pattern="[0-9]{6,20}" required aria-label="NPM">
+        <button type="submit">Simpan</button>
+      </form>
+
+      <div class="student-grid" id="studentGrid" aria-live="polite"></div>
+      <p class="hint">Mahasiswa yang ditambah lewat form tersimpan di browser ini. Agar muncul untuk semua orang, tambahkan ke daftar <code>STUDENTS</code> di bagian script.</p>
     </section>
 
     <section class="section memories" id="memories">
       <div class="section-heading reveal">
-        <p class="eyebrow">03 / OUR JOURNEY</p>
+        <p class="eyebrow">04 / OUR JOURNEY</p>
         <h2>Little moments,<br><span>big memories.</span></h2>
         <p class="section-desc">Suatu hari, hal-hal kecil ini akan menjadi cerita yang paling kita rindukan.</p>
       </div>
+
       <div class="memory-grid">
+        <div class="memory-card feature memory-one reveal" tabindex="0" role="button" aria-label="Buka foto: Group Photo">
+          <img src="daffa.jpeg" alt="Group Photo" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 001</p><h3>Group Photo</h3></div>
+        </div>
 
-  <div class="memory-card memory-one reveal">
-    <img src="daffa.jpeg" alt="First Meeting">
-    <span>✦</span>
-    <div>
-      <p>MEMORY 001</p>
-      <h3>Group Photo</h3>
-    </div>
-  </div>
+        <div class="memory-card is-video memory-two reveal">
+          <video controls playsinline preload="metadata">
+            <source src="day1.mp4" type="video/mp4">
+            Browser kamu tidak mendukung video.
+          </video>
+          <div class="mc-cap"><p>MEMORY 002</p><h3>Our Memories</h3></div>
+        </div>
 
-  <div class="memory-card memory-two reveal">
-    <img src="kelas.jpeg" alt="Class Moments">
-    <span>↗</span>
-    <div>
-      <p>MEMORY 002</p>
-      <h3>Class Moments</h3>
-    </div>
-  </div>
+        <div class="memory-card memory-three reveal" tabindex="0" role="button" aria-label="Buka foto: Recharge in the best place.">
+          <img src="gg.jpeg" alt="Recharge in the best place" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 003</p><h3>Recharge in the best place.</h3></div>
+        </div>
 
-  <div class="memory-card memory-three reveal">
-    <img src="fottto.jpeg" alt="Unforgettable Days">
-    <span>♡</span>
-    <div>
-      <p>MEMORY 003</p>
-      <h3>Unforgettable Days</h3>
-    </div>
-  </div>
+        <div class="memory-card memory-one reveal" tabindex="0" role="button" aria-label="Buka foto: A brief break from the routine.">
+          <img src="daffe.jpeg" alt="A brief break from the routine" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 004</p><h3>A brief break from the routine.</h3></div>
+        </div>
 
-</div>
+        <div class="memory-card memory-two reveal" tabindex="0" role="button" aria-label="Buka foto: Class Moments">
+          <img src="kelas.jpeg" alt="Class Moments" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 005</p><h3>Class Moments</h3></div>
+        </div>
 
-      <p class="hint">Area kenangan ini bisa kamu isi dengan foto asli kelas.</p>
+        <div class="memory-card memory-three reveal" tabindex="0" role="button" aria-label="Buka foto: Unforgettable Days">
+          <img src="fottto.jpeg" alt="Unforgettable Days" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 006</p><h3>Unforgettable Days</h3></div>
+        </div>
+
+        <div class="memory-card memory-one reveal" tabindex="0" role="button" aria-label="Buka foto: Mabim Edsa">
+          <img src="mabim.jpeg" alt="Mabim Edsa" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 007</p><h3>Mabim Edsa</h3></div>
+        </div>
+
+        <div class="memory-card is-video memory-two reveal">
+          <video controls playsinline preload="metadata" poster="/images/mabim4.jpeg">
+            <source src="mabim2.mp4" type="video/mp4">
+            Browser kamu tidak mendukung video.
+          </video>
+          <div class="mc-cap"><p>MEMORY 008</p><h3>Last Mabim</h3></div>
+        </div>
+
+        <div class="memory-card memory-three reveal" tabindex="0" role="button" aria-label="Buka foto: Last Mabim Edsa">
+          <img src="mabim4.jpeg" alt="Last Mabim Edsa" loading="lazy" decoding="async">
+          <div class="mc-cap"><p>MEMORY 009</p><h3>Last Mabim Edsa</h3></div>
+        </div>
+      </div>
+
+      <p class="hint">Klik foto untuk memperbesar.</p>
     </section>
 
     <section class="closing reveal">
       <p class="eyebrow">UNTIL THE NEXT CHAPTER</p>
       <h2>This is our story.<br><span>And it's not over yet.</span></h2>
-      <a href="#home" class="btn-primary">Back to top ↑</a>
+      <a href="#home" class="btn-primary" id="toTop">Back to top ↑</a>
     </section>
+
+    <!-- ===== TRANSISI PENUTUP: gelombang + percikan cahaya ===== -->
+    <div class="outro" id="outro" aria-hidden="true">
+      <div class="spark" id="spark"></div>
+      <p class="outro-text">✦ SEE YOU IN THE NEXT CHAPTER ✦</p>
+      <span class="outro-line"></span>
+      <div class="wv wv1"><svg viewBox="0 0 2880 160" preserveAspectRatio="none"><use href="#wavePath"/><use href="#wavePath" x="1440"/></svg></div>
+      <div class="wv wv2"><svg viewBox="0 0 2880 160" preserveAspectRatio="none"><use href="#wavePath"/><use href="#wavePath" x="1440"/></svg></div>
+      <div class="wv wv3"><svg viewBox="0 0 2880 160" preserveAspectRatio="none"><use href="#wavePath"/><use href="#wavePath" x="1440"/></svg></div>
+      <div class="wv wv4"><svg viewBox="0 0 2880 160" preserveAspectRatio="none"><use href="#wavePath"/><use href="#wavePath" x="1440"/></svg></div>
+    </div>
   </main>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau foto">
+    <button class="lb-btn lb-close" id="lbClose" aria-label="Tutup">✕</button>
+    <button class="lb-btn lb-prev" id="lbPrev" aria-label="Sebelumnya">←</button>
+    <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+    <button class="lb-btn lb-next" id="lbNext" aria-label="Berikutnya">→</button>
+  </div>
+
+  <!-- ===== daff.ai ===== -->
+  <button class="ai-fab" id="aiFab" type="button" aria-label="Buka daff.ai" aria-expanded="false">
+    <span class="ai-orb"><i>✦</i></span><span>daff<em>.ai</em></span>
+  </button>
+  <aside class="ai-panel" id="aiPanel" role="dialog" aria-label="daff.ai asisten Class E">
+    <div class="ai-head">
+      <span class="ai-orb"><i>✦</i></span>
+      <div><strong>daff<em>.ai</em></strong><small>Asisten Class E</small></div>
+      <button class="ai-x" id="aiClose" type="button" aria-label="Tutup">✕</button>
+    </div>
+    <div class="ai-log" id="aiLog" aria-live="polite"></div>
+    <div class="ai-quick" id="aiQuick">
+      <button type="button">Siapa ketua kelas?</button>
+      <button type="button">Berapa jumlah mahasiswa?</button>
+      <button type="button">NPM Daffa Fahrezi</button>
+      <button type="button">Tentang Class E</button>
+    </div>
+    <form class="ai-form" id="aiForm" autocomplete="off">
+      <input id="aiInput" placeholder="Tanya daff.ai…" aria-label="Pesan untuk daff.ai">
+      <button type="submit" aria-label="Kirim">↑</button>
+    </form>
+  </aside>
 
   <footer>
     <a href="#home" class="logo">E<span>.</span>CLASS</a>
-    <p>Made with ♥ by our class</p>
+    <p>Made with ♥ by our class · powered by daff.ai</p>
     <p>© <span id="year"></span> — All memories reserved.</p>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded", () => {
   const $ = (s, r = document) => r.querySelector(s);
@@ -348,7 +719,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $$("main section[id]").forEach(s => spy.observe(s));
 
   // Reveal bertahap
-  $$(".member-grid,.memory-grid,.stats").forEach(g => $$(".reveal,div", g).forEach((el, i) => el.style.setProperty("--d", i * 0.12 + "s")));
+  $$(".member-grid,.stats").forEach(g => $$(".reveal,div", g).forEach((el, i) => el.style.setProperty("--d", i * 0.12 + "s")));
+  $$(".memory-card").forEach((el, i) => el.style.setProperty("--d", (i % 3) * 0.12 + "s"));
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     e.target.classList.add("in");
@@ -384,19 +756,109 @@ document.addEventListener("DOMContentLoaded", () => {
     addEventListener("mousemove", e => { glow.style.transform = `translate(${e.clientX - 210}px,${e.clientY - 210}px)`; glow.style.left = glow.style.top = "0"; });
   }
 
+  // Foto gagal dimuat -> sembunyikan, kartu tampil sebagai gradasi
+  $$(".memory-card img").forEach(img => img.addEventListener("error", () => { img.style.display = "none"; }));
+
+  // Lightbox galeri
+  const photos = $$(".memory-card:not(.is-video)");
+  const lb = $("#lightbox"), lbImg = $("#lbImg"), lbCap = $("#lbCap");
+  let cur = 0;
+  const show = i => {
+    cur = (i + photos.length) % photos.length;
+    const c = photos[cur], img = $("img", c);
+    lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+    lbCap.innerHTML = `<small>${$("p", c).textContent}</small>${$("h3", c).textContent}`;
+  };
+  const openLb = i => { show(i); lb.classList.add("open"); document.body.style.overflow = "hidden"; };
+  const closeLb = () => { lb.classList.remove("open"); document.body.style.overflow = ""; };
+  photos.forEach((c, i) => {
+    c.addEventListener("click", () => openLb(i));
+    c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(i); } });
+  });
+  $("#lbClose").addEventListener("click", closeLb);
+  $("#lbPrev").addEventListener("click", () => show(cur - 1));
+  $("#lbNext").addEventListener("click", () => show(cur + 1));
+  lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
+  addEventListener("keydown", e => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") closeLb();
+    if (e.key === "ArrowLeft") show(cur - 1);
+    if (e.key === "ArrowRight") show(cur + 1);
+  });
+
   $("#year").textContent = new Date().getFullYear();
+
+  /* === Transisi penutup: gelombang, percikan, tirai "Back to top" === */
+  const outro = $("#outro"), spark = $("#spark");
+  if (outro && spark) {
+    const cols = ["#22d3ee", "#8b5cf6", "#f472b6"];
+    for (let i = 0; i < 22; i++) {
+      const s = document.createElement("i");
+      s.style.cssText = `left:${Math.random() * 100}%;--s:${(Math.random() * 4 + 2).toFixed(1)}px;--k:${cols[i % 3]};--t:${(Math.random() * 4 + 4).toFixed(1)}s;--dl:${(-Math.random() * 8).toFixed(1)}s;--x:${((Math.random() - .5) * 80).toFixed(0)}px`;
+      spark.append(s);
+    }
+    new IntersectionObserver((es, ob) => es.forEach(e => {
+      if (e.isIntersecting) { outro.classList.add("in"); ob.unobserve(e.target); }
+    }), { threshold: 0.2 }).observe(outro);
+  }
+
+  const wipe = $("#wipe"), toTop = $("#toTop");
+  if (wipe && toTop) {
+    let busy = false;
+    toTop.addEventListener("click", e => {
+      e.preventDefault();
+      if (busy) return; busy = true;
+      wipe.className = "wipe go";
+      setTimeout(() => {
+        root.style.scrollBehavior = "auto";
+        scrollTo(0, 0);
+        root.style.scrollBehavior = "";
+        wipe.className = "wipe out";
+        setTimeout(() => { wipe.className = "wipe reset"; busy = false; }, 850);
+      }, 1000);
+    });
+  }
 });
 
-/* === Tambahan: loader, mengetik, partikel, tombol magnetis === */
+/* === Tambahan: LOADING SINEMATIK, mengetik, partikel, tombol magnetis === */
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
-  const done = () => {
-    const l = document.querySelector(".loader");
-    document.body.classList.remove("loading");
-    if (l) { l.classList.add("done"); setTimeout(() => l.remove(), 1000); }
+  const loader = document.getElementById("loader");
+  const ring = document.getElementById("ldRing"), barEl = document.getElementById("ldBar");
+  const num = document.getElementById("ldNum"), status = document.getElementById("ldStatus");
+  const CIRC = 339.3, MIN = reduce ? 0 : 2600;
+  const msgs = [[0, "Menyiapkan cerita…"], [30, "Memuat kenangan…"], [60, "Merangkai planet…"], [88, "Hampir siap…"], [100, "Selamat datang ✦"]];
+  const t0 = performance.now();
+  let p = 0, loaded = false, finished = false;
+
+  const finish = () => {
+    if (finished) return; finished = true;
+    if (!loader) { document.body.classList.remove("loading"); return; }
+    setTimeout(() => {
+      loader.classList.add("exit");
+      setTimeout(() => {
+        loader.classList.add("open", "gone");
+        document.body.classList.remove("loading");
+        setTimeout(() => loader.remove(), 1300);
+      }, 550);
+    }, 450);
   };
-  addEventListener("load", () => setTimeout(done, reduce ? 0 : 900));
-  setTimeout(done, 3000);
+
+  const tick = now => {
+    const el = now - t0;
+    const target = loaded && el >= MIN ? 100 : Math.min(88, (el / (MIN || 1)) * 88);
+    p += (target - p) * 0.07;
+    if (target === 100 && p > 99.4) p = 100;
+    if (ring) ring.style.strokeDashoffset = CIRC * (1 - p / 100);
+    if (barEl) barEl.style.transform = `scaleX(${p / 100})`;
+    if (num) num.textContent = Math.round(p);
+    if (status) { let m = msgs[0][1]; for (const [t, s] of msgs) if (p >= t) m = s; status.textContent = m; }
+    if (p >= 100) return finish();
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  addEventListener("load", () => { loaded = true; });
+  setTimeout(() => { loaded = true; }, 6000);
 
   // Teks mengetik
   const el = document.getElementById("typed");
@@ -404,15 +866,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (reduce) el.textContent = words[0];
   else {
     let w = 0, c = 0, del = false;
-    const tick = () => {
+    const tickT = () => {
       const word = words[w];
       el.textContent = word.slice(0, c);
-      if (!del && c === word.length) { del = true; return setTimeout(tick, 1600); }
+      if (!del && c === word.length) { del = true; return setTimeout(tickT, 1600); }
       if (del && c === 0) { del = false; w = (w + 1) % words.length; }
       c += del ? -1 : 1;
-      setTimeout(tick, del ? 35 : 80);
+      setTimeout(tickT, del ? 35 : 80);
     };
-    setTimeout(tick, 1600);
+    setTimeout(tickT, 4200);
   }
 
   // Partikel interaktif di hero
@@ -461,6 +923,316 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 })();
+  </script>
+
+  <script>
+/* =========================================================
+   === DAFTAR MAHASISWA + daff.ai ===
+   Untuk menambah mahasiswa permanen, tambahkan baris baru
+   di array STUDENTS di bawah ini: { name: "Nama", npm: "NPM" }
+   ========================================================= */
+const STUDENTS = [
+  { name: "Daffa Fahrezi", npm: "262122111178" },
+  // { name: "Nama Mahasiswa", npm: "262122111xxx" },
+];
+const LEADERS = [
+  { role: "Ketua kelas", name: "Muhammad Aidil basith Nurdin" },
+  { role: "Wakil ketua", name: "Rizky Fadla Fadilan" },
+  { role: "Sekretaris", name: "Nabila Fawwazah Rohadatul'aisyi" },
+  { role: "Bendahara", name: "Neng Nuriya Indah" },
+];
+
+(() => {
+  const $ = s => document.querySelector(s);
+  const KEY = "classE_extra_students";
+
+  /* ---------- Daftar mahasiswa ---------- */
+  let extra = [];
+  try { extra = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+  const all = () => [...STUDENTS.map(s => ({ ...s, own: false })), ...extra.map(s => ({ ...s, own: true }))]
+    .sort((a, b) => a.name.localeCompare(b.name, "id"));
+  window.__classE = { all };
+
+  const grid = $("#studentGrid"), search = $("#stuSearch"), countEl = $("#stuCount");
+  const initials = n => n.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+  const hue = n => { let h = 0; for (const ch of n) h = (h * 31 + ch.charCodeAt(0)) % 360; return h; };
+
+  function render() {
+    const q = search.value.trim().toLowerCase();
+    const list = all().filter(s => !q || s.name.toLowerCase().includes(q) || s.npm.includes(q));
+    countEl.textContent = all().length;
+    grid.replaceChildren();
+    if (!list.length) {
+      const d = document.createElement("div");
+      d.className = "empty";
+      d.textContent = q ? `Tidak ada hasil untuk “${search.value.trim()}”. Coba nama atau NPM lain.` : "Belum ada mahasiswa. Klik “Tambah mahasiswa” untuk mulai.";
+      grid.append(d); return;
+    }
+    list.forEach((s, i) => {
+      const h = hue(s.name);
+      const card = document.createElement("article");
+      card.className = "student-card";
+      card.style.setProperty("--d", Math.min(i, 12) * 0.05 + "s");
+
+      const av = document.createElement("div");
+      av.className = "stu-avatar"; av.textContent = initials(s.name);
+      av.style.setProperty("--h1", `hsl(${h} 80% 60%)`);
+      av.style.setProperty("--h2", `hsl(${(h + 60) % 360} 85% 55%)`);
+
+      const info = document.createElement("div"); info.className = "stu-info";
+      const no = document.createElement("p"); no.className = "stu-no"; no.textContent = String(i + 1).padStart(2, "0") + " / CLASS E";
+      const nm = document.createElement("h3"); nm.textContent = s.name;
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "stu-npm"; btn.title = "Klik untuk menyalin NPM";
+      btn.innerHTML = "<span>NPM</span><b></b>"; btn.querySelector("b").textContent = s.npm;
+      btn.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(s.npm); } catch (e) {}
+        btn.classList.add("copied"); btn.querySelector("span").textContent = "Disalin ✓";
+        setTimeout(() => { btn.classList.remove("copied"); btn.querySelector("span").textContent = "NPM"; }, 1400);
+      });
+      info.append(no, nm, btn);
+      card.append(av, info);
+
+      if (s.own) {
+        const del = document.createElement("button");
+        del.type = "button"; del.className = "stu-del"; del.textContent = "✕"; del.setAttribute("aria-label", "Hapus " + s.name);
+        del.addEventListener("click", () => {
+          extra = extra.filter(x => x.npm !== s.npm);
+          try { localStorage.setItem(KEY, JSON.stringify(extra)); } catch (e) {}
+          render();
+        });
+        card.append(del);
+      }
+      grid.append(card);
+    });
+  }
+  search.addEventListener("input", render);
+
+  const form = $("#stuForm"), tg = $("#stuToggle");
+  tg.addEventListener("click", () => {
+    const open = form.classList.toggle("open");
+    tg.setAttribute("aria-expanded", open);
+    tg.textContent = open ? "Tutup form" : "+ Tambah mahasiswa";
+    if (open) $("#stuName").focus();
+  });
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const name = $("#stuName").value.trim().replace(/\s+/g, " "), npm = $("#stuNpm").value.trim();
+    if (!name || !/^\d{6,20}$/.test(npm)) return;
+    if (all().some(s => s.npm === npm)) { $("#stuNpm").setCustomValidity("NPM ini sudah ada"); $("#stuNpm").reportValidity(); return; }
+    extra.push({ name, npm });
+    try { localStorage.setItem(KEY, JSON.stringify(extra)); } catch (e) {}
+    form.reset(); search.value = ""; render();
+  });
+  $("#stuNpm").addEventListener("input", e => e.target.setCustomValidity(""));
+  render();
+
+  /* ---------- daff.ai ---------- */
+  const panel = $("#aiPanel"), fab = $("#aiFab"), log = $("#aiLog"), input = $("#aiInput");
+  let greeted = false;
+  const setOpen = o => {
+    panel.classList.toggle("open", o); fab.setAttribute("aria-expanded", o);
+    if (o) { if (!greeted) { greeted = true; say("Halo! Aku daff.ai ✦ asisten Class E.\nTanyakan soal pengurus kelas, jumlah mahasiswa, atau cari NPM teman sekelas."); } setTimeout(() => input.focus(), 250); }
+  };
+  fab.addEventListener("click", () => setOpen(!panel.classList.contains("open")));
+  $("#aiBadge").addEventListener("click", () => setOpen(true));
+  $("#aiClose").addEventListener("click", () => setOpen(false));
+  addEventListener("keydown", e => { if (e.key === "Escape") setOpen(false); });
+
+  const add = (txt, who) => { const m = document.createElement("div"); m.className = "msg " + who; m.textContent = txt; log.append(m); log.scrollTop = log.scrollHeight; return m; };
+  const say = txt => add(txt, "bot");
+
+  function reply(raw) {
+    const q = raw.toLowerCase(), list = all();
+    const role = r => LEADERS.find(l => l.role.toLowerCase().includes(r));
+    if (/^(hai|halo|hi|hello|hey)\b/.test(q)) return "Halo juga! Mau tahu apa tentang Class E?";
+    if (/terima kasih|makasih|thanks/.test(q)) return "Sama-sama! Semangat kuliahnya ✦";
+    const digits = q.match(/\d{6,}/);
+    if (digits) { const s = list.find(x => x.npm === digits[0]); return s ? `NPM ${s.npm} milik ${s.name}.` : "NPM itu belum ada di daftar Class E."; }
+    if (/ketua|leader/.test(q) && !/wakil/.test(q)) return `Ketua kelas Class E: ${role("ketua").name}.`;
+    if (/wakil/.test(q)) return `Wakil ketua: ${role("wakil").name}.`;
+    if (/sekretaris|secretary/.test(q)) return `Sekretaris: ${role("sekretaris").name}.`;
+    if (/bendahara|treasurer|uang kas|kas/.test(q)) return `Bendahara: ${role("bendahara").name}.`;
+    if (/pengurus|struktur/.test(q)) return LEADERS.map(l => `${l.role}: ${l.name}`).join("\n");
+    if (/berapa|jumlah|total/.test(q)) return `Saat ini ada ${list.length} mahasiswa di daftar Class E.`;
+    if (/daftar|semua mahasiswa|list|anggota/.test(q)) return list.length ? list.map((s, i) => `${i + 1}. ${s.name} (${s.npm})`).join("\n") : "Daftar masih kosong.";
+    if (/memori|memories|foto|video|galeri/.test(q)) return "Galeri ada di bagian Memories: 7 foto dan 2 video. Klik foto untuk memperbesar.";
+    if (/tentang|about|kelas e|class e|siapa kalian/.test(q)) return "Class E adalah kelas mahasiswa Pendidikan Bahasa Inggris angkatan 2026/2027. Kami belajar, tumbuh, dan meraih mimpi bersama.";
+    const words = q.split(/[^a-z']+/).filter(w => w.length > 2);
+    const hit = list.filter(s => words.some(w => s.name.toLowerCase().split(/\s+/).includes(w)));
+    if (hit.length) return hit.map(s => `${s.name}\nNPM ${s.npm}`).join("\n\n");
+    return "Aku belum paham itu. Coba tanya: “siapa ketua kelas?”, “berapa jumlah mahasiswa?”, atau ketik nama/NPM teman sekelas.";
+  }
+
+  function ask(text) {
+    text = text.trim(); if (!text) return;
+    add(text, "me");
+    const t = add("", "bot"); t.className = "msg bot typing"; t.innerHTML = "<i></i><i></i><i></i>";
+    setTimeout(() => { t.className = "msg bot"; t.textContent = reply(text); log.scrollTop = log.scrollHeight; }, 550 + Math.random() * 400);
+  }
+  $("#aiForm").addEventListener("submit", e => { e.preventDefault(); ask(input.value); input.value = ""; });
+  document.querySelectorAll("#aiQuick button").forEach(b => b.addEventListener("click", () => ask(b.textContent)));
+})();
+  </script>
+
+  <script>
+/* === Planet Bumi 3D (Three.js) === */
+addEventListener("load", () => {
+  const wrap = document.getElementById("earth");
+  const cv = document.getElementById("earthCanvas");
+  if (!wrap || !cv) return;
+  if (typeof THREE === "undefined") { console.warn("Three.js gagal dimuat"); wrap.classList.add("no-webgl"); return; }
+
+  try {
+    const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+    /* Noise 3D (seamless di bola) */
+    const hash = (x, y, z) => { const n = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453; return n - Math.floor(n); };
+    const sm = t => t * t * (3 - 2 * t);
+    const lerp = (a, b, t) => a + (b - a) * t;
+    function noise(x, y, z) {
+      const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z);
+      const u = sm(x - xi), v = sm(y - yi), w = sm(z - zi);
+      return lerp(
+        lerp(lerp(hash(xi, yi, zi), hash(xi + 1, yi, zi), u), lerp(hash(xi, yi + 1, zi), hash(xi + 1, yi + 1, zi), u), v),
+        lerp(lerp(hash(xi, yi, zi + 1), hash(xi + 1, yi, zi + 1), u), lerp(hash(xi, yi + 1, zi + 1), hash(xi + 1, yi + 1, zi + 1), u), v), w);
+    }
+    function fbm(x, y, z, oct) {
+      let a = .5, f = 1, s = 0, t = 0;
+      for (let i = 0; i < oct; i++) { s += a * noise(x * f, y * f, z * f); t += a; a *= .5; f *= 2.03; }
+      return s / t;
+    }
+    const ss = (a, b, x) => { const t = Math.min(Math.max((x - a) / (b - a), 0), 1); return t * t * (3 - 2 * t); };
+    const mix = (c1, c2, t) => [lerp(c1[0], c2[0], t), lerp(c1[1], c2[1], t), lerp(c1[2], c2[2], t)];
+
+    /* Renderer & scene dibuat dulu (cepat) */
+    const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(30, 1, .1, 50);
+    camera.position.set(0, 0, 5);
+
+    const tilt = new THREE.Group();
+    tilt.rotation.set(.22, 0, .41);
+    scene.add(tilt);
+
+    const vert = `varying vec3 vN; varying vec3 vV;
+      void main(){ vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position,1.0);
+        vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`;
+    scene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(1.16, 64, 64),
+      new THREE.ShaderMaterial({
+        vertexShader: vert, side: THREE.BackSide, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        fragmentShader: `varying vec3 vN; varying vec3 vV;
+          void main(){ float d = clamp(-dot(vN, vV), 0.0, 1.0); float i = pow(d, 2.0) * 2.4;
+            gl_FragColor = vec4(vec3(0.13, 0.62, 1.0) * i, i); }`
+      })
+    ));
+    scene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(1.035, 64, 64),
+      new THREE.ShaderMaterial({
+        vertexShader: vert, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        fragmentShader: `varying vec3 vN; varying vec3 vV;
+          void main(){ float f = pow(1.0 - clamp(dot(vN, vV), 0.0, 1.0), 3.0);
+            gl_FragColor = vec4(vec3(0.2, 0.85, 1.0) * f, f * 0.9); }`
+      })
+    ));
+
+    const sun = new THREE.DirectionalLight(0xfff4e0, 1.55); sun.position.set(-3.5, 1.8, 3.2); scene.add(sun);
+    scene.add(new THREE.HemisphereLight(0x5ab4ff, 0x06102a, .38));
+    const back = new THREE.DirectionalLight(0x22d3ee, .5); back.position.set(3, -1, -3); scene.add(back);
+
+    const resize = () => {
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+    };
+    resize();
+    new ResizeObserver(resize).observe(wrap);
+
+    let visible = true, last = performance.now(), earth = null, clouds = null;
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(wrap);
+
+    const render = now => {
+      requestAnimationFrame(render);
+      const dt = Math.min((now - last) / 1000, .1); last = now;
+      if (!earth || !visible || document.hidden) return;
+      if (!reduce) { earth.rotation.y += dt * .22; clouds.rotation.y += dt * .28; }
+      renderer.render(scene, camera);
+    };
+    requestAnimationFrame(render);
+
+    /* Generate tekstur bertahap (per beberapa baris per frame agar tidak nge-freeze) */
+    const W = 768, H = 384, SEA = .535;
+    const mk = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; };
+    const cColor = mk(), cBump = mk(), cSpec = mk(), cCloud = mk();
+    const ctxs = [cColor, cBump, cSpec, cCloud].map(c => c.getContext("2d"));
+    const [iC, iB, iS, iK] = ctxs.map(g => g.createImageData(W, H));
+
+    const deep = [5, 28, 88], shallow = [38, 128, 205];
+    const grass = [52, 134, 56], forest = [26, 88, 42], rock = [128, 112, 84], snow = [240, 244, 250], sand = [200, 172, 104];
+
+    const row = py => {
+      const lat = (.5 - (py + .5) / H) * Math.PI, cl = Math.cos(lat), y = Math.sin(lat);
+      for (let px = 0; px < W; px++) {
+        const lon = ((px + .5) / W) * 2 * Math.PI - Math.PI;
+        const x = cl * Math.cos(lon), z = cl * Math.sin(lon);
+        const i = (py * W + px) * 4;
+        const d = fbm(x * 1.5 + 5, y * 1.5, z * 1.5, 6) - SEA;
+        let col, bump, spec;
+        if (d < 0) {
+          col = mix(shallow, deep, Math.pow(Math.min(-d / .2, 1), .6)); bump = 30; spec = 255;
+        } else {
+          const e = Math.min(d / .2, 1);
+          const m = fbm(x * 3 + 20, y * 3, z * 3, 4);
+          col = mix(grass, forest, ss(.45, .6, m));
+          const desert = ss(.5, .38, m) * (1 - ss(.18, .6, Math.abs(Math.abs(lat) - .43)));
+          col = mix(col, sand, Math.max(0, Math.min(desert, 1)));
+          col = mix(col, rock, ss(.45, .8, e));
+          col = mix(col, snow, ss(.82, .98, e));
+          col = mix(col, sand, (1 - ss(0, .03, d)) * .5);
+          bump = 70 + e * 185; spec = 25;
+        }
+        const ice = ss(1.12, 1.3, Math.abs(lat) + (fbm(x * 4, y * 4, z * 4, 3) - .5) * .35);
+        if (ice > 0) { col = mix(col, snow, ice); spec = lerp(spec, 90, ice); bump = lerp(bump, 120, ice); }
+        iC.data[i] = col[0]; iC.data[i + 1] = col[1]; iC.data[i + 2] = col[2]; iC.data[i + 3] = 255;
+        iB.data[i] = iB.data[i + 1] = iB.data[i + 2] = bump; iB.data[i + 3] = 255;
+        iS.data[i] = iS.data[i + 1] = iS.data[i + 2] = spec; iS.data[i + 3] = 255;
+        const a = ss(.5, .74, fbm(x * 2.2 + 40, y * 3.4, z * 2.2, 6));
+        iK.data[i] = iK.data[i + 1] = iK.data[i + 2] = 255; iK.data[i + 3] = a * 235;
+      }
+    };
+
+    const finish = () => {
+      [iC, iB, iS, iK].forEach((im, k) => ctxs[k].putImageData(im, 0, 0));
+      const aniso = renderer.capabilities.getMaxAnisotropy();
+      const tex = (c, srgb) => { const t = new THREE.CanvasTexture(c); t.anisotropy = aniso; if (srgb) t.encoding = THREE.sRGBEncoding; return t; };
+      earth = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 64, 64),
+        new THREE.MeshPhongMaterial({ map: tex(cColor, true), bumpMap: tex(cBump), bumpScale: .035, specularMap: tex(cSpec), specular: new THREE.Color(0x4a7fb5), shininess: 22 })
+      );
+      clouds = new THREE.Mesh(
+        new THREE.SphereGeometry(1.012, 64, 64),
+        new THREE.MeshPhongMaterial({ map: tex(cCloud, true), transparent: true, depthWrite: false, opacity: .92 })
+      );
+      tilt.add(earth); tilt.add(clouds);
+      wrap.classList.add("ready");
+    };
+
+    let py = 0;
+    const step = () => {
+      const end = Math.min(py + 12, H);
+      for (; py < end; py++) row(py);
+      if (py < H) requestAnimationFrame(step); else finish();
+    };
+    requestAnimationFrame(step);
+  } catch (err) {
+    console.error("Planet Bumi gagal dibuat:", err);
+    wrap.classList.add("no-webgl");
+  }
+});
   </script>
 </body>
 </html>
